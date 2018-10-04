@@ -15,7 +15,8 @@ namespace Thrashing_Detector
 
             //List<Process> _procs = new List<Process>(System.Diagnostics.Process.GetProcesses());
             Monitors _monitors = new Monitors();
-            
+            _monitors.PollFunction();
+
             Console.WriteLine("Testing...");
         }
     }

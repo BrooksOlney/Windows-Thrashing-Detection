@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Management;
 
 namespace Thrashing_Detector
 {
@@ -13,7 +14,19 @@ namespace Thrashing_Detector
         Memory _memory { get; set; }
         VirtualMemory _vm { get; set; }
 
+        double _procTime { get; set; }
+        double _memoryUsed { get; set; }
+        double _pageFaults { get; set; }
 
+        PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+        PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+
+        public void PollFunction()
+        {
+            _procTime = cpuCounter.NextValue();
+            _memoryUsed = ramCounter.NextValue();
+
+        }
 
         internal Monitors()
         {
@@ -21,12 +34,19 @@ namespace Thrashing_Detector
             _procs = new Processes();
             _memory = new Memory();
             _vm = new VirtualMemory();
+            _procTime = 0;
+            _memoryUsed = 0;
+            _pageFaults = 0;
+        }
+
+        private void GetTotals()
+        {
+
         }
 
         class Processes
         {
-            List<Process> _procs = new List<Process>()
-                .Where(p => p.);
+            List<Process> _procs = new List<Process>();
 
             internal Processes()
             {
@@ -40,12 +60,6 @@ namespace Thrashing_Detector
         }
 
         class VirtualMemory
-        {
-
-        }
-
-
-        public void PollFunction()
         {
 
         }
