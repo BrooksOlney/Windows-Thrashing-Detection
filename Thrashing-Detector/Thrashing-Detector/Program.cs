@@ -15,7 +15,16 @@ namespace Thrashing_Detector
 
             //List<Process> _procs = new List<Process>(System.Diagnostics.Process.GetProcesses());
             Monitors _monitors = new Monitors();
-            _monitors.PollFunction();
+            while (true)
+            {
+                System.Threading.Thread.Sleep(1000);
+                _monitors.PollFunction();
+                Console.Clear();
+                Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}MB\nPage Faults/sec: {2}",
+                    _monitors._procTime.ToString("N2"), _monitors._memoryUsed, _monitors._pageFaults);
+            }
+            //_monitors.PollFunction();
+            //_monitors.PollFunction();
 
             Console.WriteLine("Testing...");
         }

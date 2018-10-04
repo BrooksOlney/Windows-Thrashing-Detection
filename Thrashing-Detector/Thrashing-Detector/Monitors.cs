@@ -14,18 +14,19 @@ namespace Thrashing_Detector
         Memory _memory { get; set; }
         VirtualMemory _vm { get; set; }
 
-        double _procTime { get; set; }
-        double _memoryUsed { get; set; }
-        double _pageFaults { get; set; }
+        public double _procTime { get; set; }
+        public double _memoryUsed { get; set; }
+        public double _pageFaults { get; set; }
 
         PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+        PerformanceCounter pagingCounter = new PerformanceCounter("Processor", "Page Faults/sec");
 
         public void PollFunction()
         {
             _procTime = cpuCounter.NextValue();
             _memoryUsed = ramCounter.NextValue();
-
+            _pageFaults = pagingCounter.NextValue();
         }
 
         internal Monitors()
