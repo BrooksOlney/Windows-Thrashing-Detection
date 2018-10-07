@@ -20,7 +20,7 @@ namespace Thrashing_Detector
 
         PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available MBytes");
-        PerformanceCounter pagingCounter = new PerformanceCounter("Processor", "Page Faults/sec");
+        PerformanceCounter pagingCounter = new PerformanceCounter("Memory", "Page Faults/sec");
 
         public void PollFunction()
         {
