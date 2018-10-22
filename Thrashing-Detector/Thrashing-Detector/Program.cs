@@ -20,13 +20,9 @@ namespace Thrashing_Detector
                 System.Threading.Thread.Sleep(250);
                 _monitors.PollFunction();
                 Console.Clear();
-                //Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}MB\n",
-                //    _monitors._procTime.ToString("N2"), _monitors._memoryUsed);
                 Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}MB\nPage Faults/sec: {2}",
                     _monitors._procTime.ToString("N2"), _monitors._memoryUsed, _monitors._pageFaults);
             }
-            //_monitors.PollFunction();
-            //_monitors.PollFunction();
 
             Console.WriteLine("Testing...");
         }
