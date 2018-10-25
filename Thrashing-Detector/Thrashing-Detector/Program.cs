@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.IO;
 
 namespace Thrashing_Detector
 {
@@ -11,20 +12,26 @@ namespace Thrashing_Detector
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Testing...");
-
-            //List<Process> _procs = new List<Process>(System.Diagnostics.Process.GetProcesses());
             Monitors _monitors = new Monitors();
-            while (true)
+            StreamWriter sw = new StreamWriter("resource_stats.csv");
+            while (!Console.KeyAvailable)
             {
                 System.Threading.Thread.Sleep(250);
                 _monitors.PollFunction();
-                Console.Clear();
-                Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}MB\nPage Faults/sec: {2}",
+                ClearConsole();
+                Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}MB\nHard Page Faults/sec: {2}",
                     _monitors._procTime.ToString("N2"), _monitors._memoryUsed, _monitors._pageFaults);
+                sw.WriteLine("{0}, {1}, {2}, {3}", DateTime.Now.TimeOfDay, _monitors._memoryUsed, _monitors._procTime.ToString("N2"), _monitors._pageFaults);
             }
 
+            sw.Close();
             Console.WriteLine("Testing...");
+        }
+
+        static void ClearConsole()
+        {
+            Console.Clear();
+            Console.WriteLine("Press 'c' to break cancel current operations.");
         }
     }
 }
