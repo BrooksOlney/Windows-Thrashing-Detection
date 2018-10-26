@@ -33,6 +33,12 @@ namespace Thrashing_Detector
             _memoryUsed = (ramCounter.NextValue() / _totalMemory) * 100;
             _pageFaults = pagingCounter.NextValue();
             _records.Add(new Tuple<double, double, double>(_procTime, _memoryUsed, _pageFaults));
+            ThrashingCheck();
+        }
+
+        internal void ThrashingCheck()
+        {
+            
         }
 
         // constructor
