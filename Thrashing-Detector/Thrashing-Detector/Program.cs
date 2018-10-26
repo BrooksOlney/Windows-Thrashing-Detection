@@ -16,12 +16,12 @@ namespace Thrashing_Detector
             StreamWriter sw = new StreamWriter("resource_stats.csv");
             while (!Console.KeyAvailable)
             {
-                System.Threading.Thread.Sleep(250);
+                System.Threading.Thread.Sleep(125);
                 _monitors.PollFunction();
                 ClearConsole();
-                Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}MB\nHard Page Faults/sec: {2}",
-                    _monitors._procTime.ToString("N2"), _monitors._memoryUsed, _monitors._pageFaults);
-                sw.WriteLine("{0}, {1}, {2}, {3}", DateTime.Now.TimeOfDay, _monitors._memoryUsed, _monitors._procTime.ToString("N2"), _monitors._pageFaults);
+                Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}%\nHard Page Faults/sec: {2}",
+                    _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults);
+                sw.WriteLine("{0}, {1}, {2}, {3}", DateTime.Now.TimeOfDay, _monitors._memoryUsed.ToString("N2"), _monitors._procTime.ToString("N2"), _monitors._pageFaults);
             }
 
             sw.Close();
@@ -31,7 +31,7 @@ namespace Thrashing_Detector
         static void ClearConsole()
         {
             Console.Clear();
-            Console.WriteLine("Press 'c' to break cancel current operations.");
+            Console.WriteLine("Press 'c' to terminate current operations.");
         }
     }
 }
