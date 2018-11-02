@@ -19,6 +19,7 @@ namespace Thrashing_Detector
                 System.Threading.Thread.Sleep(125);
                 _monitors.PollFunction();
                 _monitors.ThrashingCheck();
+                _monitors.processes();
                 ClearConsole();
                 Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}%\nHard Page Faults/sec: {2}",
                     _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults);

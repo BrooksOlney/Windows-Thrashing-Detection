@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Management;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Thrashing_Detector
 {
@@ -61,7 +63,18 @@ namespace Thrashing_Detector
             }
 
         }
+        //function to capture the processes
+        internal void processes()
+        {
+            List<Process> proclist = Process.GetProcesses().ToList();
+            proclist = proclist.OrderByDescending(o => o.PeakWorkingSet64).ToList();
+            StreamWriter sw = new StreamWriter("process_stats.csv");
 
+            for (int i = 0; i < 10; i++)
+            {
+                sw.WriteLine("Process: {0} ID: {1} Memory: {2}", proclist[i].ProcessName, proclist[i].Id, proclist[i].PeakWorkingSet64);
+            }
+        }
         // constructor
         internal Monitors()
         {
