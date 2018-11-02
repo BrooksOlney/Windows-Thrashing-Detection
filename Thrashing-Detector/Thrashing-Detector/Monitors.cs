@@ -29,7 +29,7 @@ namespace Thrashing_Detector
 
         // Performance counters for different resource types
         PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-        PerformanceCounter ramCounter = new PerformanceCounter("Process", "Working Set", "_Total");
+        PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available Bytes");
         PerformanceCounter pagingCounter = new PerformanceCounter("Memory", "Page Reads/sec");
         //PerformanceCounter totalRam = new PerformanceCounter("Memory", "Total MBytes");
 
@@ -37,7 +37,7 @@ namespace Thrashing_Detector
         public void PollFunction()
         {
             _procTime = cpuCounter.NextValue();
-            _memoryUsed = (ramCounter.NextValue() / _totalMemory) * 100;
+            _memoryUsed = ((_totalMemory - ramCounter.NextValue()) / _totalMemory) * 100;
             _pageFaults = pagingCounter.NextValue();
             _records.Add(new Tuple<double, double, double>(_procTime, _memoryUsed, _pageFaults));
             ThrashingCheck();
