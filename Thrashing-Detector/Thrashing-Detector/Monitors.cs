@@ -74,6 +74,7 @@ namespace Thrashing_Detector
             {
                 sw.WriteLine("Process: {0} ID: {1} Memory: {2}", proclist[i].ProcessName, proclist[i].Id, proclist[i].PeakWorkingSet64);
             }
+            sw.Close();
         }
         // constructor
         internal Monitors()
