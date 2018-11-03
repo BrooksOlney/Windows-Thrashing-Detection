@@ -51,24 +51,23 @@ namespace Thrashing_Detector
             {
                 if (_pageFaults > HARDFAULTS_THRASHING)
                 {
-                    _thrashingCounter += 1;
+                    _thrashingCounter++;
+                    if (_thrashingCounter == THRASHING_TIMER / 2)
+                    {
+                        processes();
+                    }
+
+                    if (_thrashingCounter == THRASHING_TIMER)
+                    {
+                        MessageBox.Show("Thrashing is occuring!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        _thrashingCounter = 0;
+                    }
                 }
                 else
                 {
-                    _thrashingCounter -= 1;
+                    _thrashingCounter--;
                 }
 
-            }
-
-            if (_thrashingCounter == THRASHING_TIMER / 2)
-            {
-                processes();
-            }
-
-            if (_thrashingCounter == THRASHING_TIMER)
-            {
-                MessageBox.Show("Thrashing is occuring!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                _thrashingCounter = 0;
             }
         }
         //function to capture the processes
