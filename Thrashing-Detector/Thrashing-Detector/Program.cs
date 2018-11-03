@@ -21,8 +21,8 @@ namespace Thrashing_Detector
                 _monitors.ThrashingCheck();
                 _monitors.processes();
                 ClearConsole();
-                Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}%\nHard Page Faults/sec: {2}",
-                    _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults);
+                Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}%\nHard Page Faults/sec: {2}Thrashing counter: {3}",
+                    _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults, _monitors._thrashingCounter);
                 sw.WriteLine("{0}, {1}, {2}, {3}", DateTime.Now.TimeOfDay, _monitors._memoryUsed.ToString("N2"), _monitors._procTime.ToString("N2"), _monitors._pageFaults);
             }
 
