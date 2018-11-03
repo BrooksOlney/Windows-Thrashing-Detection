@@ -63,7 +63,7 @@ namespace Thrashing_Detector
                         _thrashingCounter = 0;
                     }
                 }
-                else
+                else if(_thrashingCounter > 0)
                 {
                     _thrashingCounter--;
                 }
