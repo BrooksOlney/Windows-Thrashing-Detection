@@ -31,7 +31,7 @@ namespace Thrashing_Detector
 
         // Performance counters for different resource types
         PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-        PerformanceCounter ramCounter = new PerformanceCounter("Process", "Working Set", "_Total");
+        PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available Bytes");
         PerformanceCounter pagingCounter = new PerformanceCounter("Memory", "Page Reads/sec");
         //PerformanceCounter totalRam = new PerformanceCounter("Memory", "Total MBytes");
 
@@ -39,7 +39,7 @@ namespace Thrashing_Detector
         public void PollFunction()
         {
             _procTime = cpuCounter.NextValue();
-            _memoryUsed = (ramCounter.NextValue() / _totalMemory) * 100;
+            _memoryUsed = ((_totalMemory - ramCounter.NextValue()) / _totalMemory) * 100;
             _pageFaults = pagingCounter.NextValue();
             _records.Add(new Tuple<double, double, double>(_procTime, _memoryUsed, _pageFaults));
             ThrashingCheck();
@@ -47,21 +47,29 @@ namespace Thrashing_Detector
 
         internal void ThrashingCheck()
         {
-            if (_memoryUsed >= MEM_THRASHING && _procTime <= PROC_THRASHING && _pageFaults >= HARDFAULTS_THRASHING)
+            if (_memoryUsed > MEM_THRASHING)
             {
-                _thrashingCounter += 1;
-            }
-            else if (_thrashingCounter > 0)
-            {
-                _thrashingCounter -= 1;
+                if (_pageFaults > HARDFAULTS_THRASHING)
+                {
+                    _thrashingCounter += 1;
+                }
+                else
+                {
+                    _thrashingCounter -= 1;
+                }
+
             }
 
-            if(_thrashingCounter >= THRASHING_TIMER)
+            if (_thrashingCounter == THRASHING_TIMER / 2)
+            {
+                processes();
+            }
+
+            if (_thrashingCounter == THRASHING_TIMER)
             {
                 MessageBox.Show("Thrashing is occuring!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 _thrashingCounter = 0;
             }
-
         }
         //function to capture the processes
         internal void processes()
