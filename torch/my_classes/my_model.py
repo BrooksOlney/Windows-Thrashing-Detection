@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torchvision
 import numpy as np
 import pandas as pd
@@ -14,18 +15,22 @@ class MyModel(nn.Module):
   def __init__(self):
     super(MyModel, self).__init__()
     
-    self.input_dimensions = my_data.dataset.rows
+    self.input_dimensions = my_data.training_dataset.rows
     self.output_dimensions = 1
-    self.hidden_layer = 3
+    self.hidden_layer = 2
     
-    self.learning_rate = 0.005
-    self.training_iterations = 50000
+    self.learning_rate = 0.001
+    self.training_iterations = 25000
     
     self.linear_layer_1 = nn.Linear(self.input_dimensions, self.hidden_layer)
     self.linear_layer_2 = nn.Linear(self.hidden_layer, self.output_dimensions)
     
   #Whenever __call__ is made, this is run
   def forward(self, x):
+
+    # layer1 = F.relu(self.linear_layer_1(x))
+    # layer2 = F.relu(self.linear_layer_2(layer1))
+
     layer1 = self.sigmoid(self.linear_layer_1(x)) 
     layer2 = self.sigmoid(self.linear_layer_2(layer1))
     return layer2
