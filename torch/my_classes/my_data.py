@@ -10,28 +10,36 @@ from torch.utils.data import Dataset
 
 
 class TrashingDataset(Dataset):
-  def __init__(self, csv_file):
+  def __init__(self, is_training, csv_file):
     
     #Read in data, split testdata between features and binary results
-    self.dataframe = pd.read_csv(csv_file)
-    
-    self.rows = self.dataframe.shape[1] - 1
-    
-    self.metrics = self.dataframe.iloc[:, 0:self.rows]
-    self.results = self.dataframe.iloc[:, self.rows:]
-    
-    self.tensor_metrics = torch.tensor(self.metrics.values, dtype = torch.float)
-    self.tensor_results = torch.tensor(self.results.values, dtype = torch.float)
-    
-    self.batch_size_metrics = self.tensor_metrics.size()[0]
-    self.dimension_count_results = self.tensor_results.size()[1]
+    self.is_training = is_training
 
-    self.batch_size_metrics = self.tensor_metrics.size()[0]
-    self.dimension_count_results = self.tensor_results.size()[1]
-  
-  def __len__(self):
-    return len(self.dataframe)
+    if is_training:
+        self.dataframe = pd.read_csv(csv_file)
+        self.rows = self.dataframe.shape[1] - 1
+        self.features = self.dataframe.iloc[:, 0:self.rows]
+        self.results = self.dataframe.iloc[:, self.rows:]  
+        self.tensor_features = torch.tensor(self.features.values, dtype = torch.float)
+        self.tensor_results = torch.tensor(self.results.values, dtype = torch.float)
+    else:
+        # print("Is closed? : ", csv_file.closed)
+        self.last_line = csv_file.readlines()[-1].strip().split(",")
+        self.test_data = [float(i) for i in self.last_line]    
+        self.tensor_features = torch.tensor(self.test_data)
 
 
-with open('data/training_set.csv', 'r') as csv_file:
-  dataset = TrashingDataset(csv_file)
+  def reload_data(self):
+    if self.is_training:
+        with open('data/training_set.csv', 'r') as train_data_csv:
+            self.__init__(True, train_data_csv)
+    else:
+        with open('data/testing_set.csv', 'r') as test_data_csv:
+            self.__init__(False, test_data_csv)
+            
+
+with open('data/training_set.csv', 'r') as train_data_csv:
+    training_dataset = TrashingDataset(True, train_data_csv)
+
+with open('data/testing_set.csv', 'r') as test_data_csv:
+    testing_dataset = TrashingDataset(False, test_data_csv)
