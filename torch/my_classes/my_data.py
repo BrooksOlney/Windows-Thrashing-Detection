@@ -55,5 +55,12 @@ class TrashingDataset(Dataset):
 with open('data/training_set.csv', 'r') as train_data_csv:
     training_dataset = TrashingDataset(True, train_data_csv)
 
-with open('data/testing_set.csv', 'r') as test_data_csv:
-    testing_dataset = TrashingDataset(False, test_data_csv)
+while(1):
+    try:
+        with open('data/testing_set.csv', 'r') as test_data_csv:
+            testing_dataset = TrashingDataset(False, test_data_csv)
+            break
+    except (PermissionError, FileNotFoundError):
+        pass
+
+        
