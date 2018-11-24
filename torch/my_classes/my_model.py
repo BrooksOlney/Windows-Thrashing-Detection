@@ -20,15 +20,17 @@ class MyModel(nn.Module):
     self.hidden_layer = 2
     
     self.learning_rate = 0.01
-    self.training_iterations = 2500 #NAN errors over 3000 currently
+    self.training_iterations = 25000 #NAN errors over 3000 currently
     
     self.linear_layer_1 = nn.Linear(self.input_dimensions, self.hidden_layer)
     self.linear_layer_2 = nn.Linear(self.hidden_layer, self.output_dimensions)
     
   #Whenever __call__ is made, this is run
   def forward(self, x):
-    layer1 = self.sigmoid(self.linear_layer_1(x))
-    layer2 = self.sigmoid(self.linear_layer_2(layer1))
+    leaky_relu = nn.LeakyReLU(0.1)
+
+    layer1 = leaky_relu(self.linear_layer_1(x))
+    layer2 = leaky_relu(self.linear_layer_2(layer1))
     return layer2
   
   #Range: [0,1]
@@ -37,7 +39,7 @@ class MyModel(nn.Module):
   
   #Returns a % how likely input fits model
   def predict(self, inputs):
-    return self.forward(inputs)
+    return self.sigmoid(self.forward(inputs)) 
 
   def save_weights(self):
     torch.save(self.state_dict(), "data/neural_net.pt")
