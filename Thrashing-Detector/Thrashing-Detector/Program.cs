@@ -14,8 +14,6 @@ namespace Thrashing_Detector
     {
         static void Main(string[] args)
         {
-            //FileStream fileHandle = new FileStream("resource_stats.csv", FileMode.Append, FileAccess.Write, FileShare.Read);
-            //StreamWriter sw = new StreamWriter(fileHandle);
             StreamWriter datacollection = new StreamWriter("training_set.csv");
 
             if (!File.Exists("settings.config"))
@@ -59,17 +57,12 @@ namespace Thrashing_Detector
             Monitors _monitors = new Monitors(procthrashing, memthrashing, hardfaultsthrashing, thrashingTimer);
             
             NamedPipeServerStream npss = new NamedPipeServerStream("pytorchModel", PipeDirection.InOut, 1, PipeTransmissionMode.Message);
-            //npss.TransmissionMode = PipeTransmissionMode.Message;
 
             npss.WaitForConnection();
 
-
-
             MemoryStream ms = new MemoryStream();
-            //BinaryReader br = new BinaryReader(ms);
             BinaryWriter bw = new BinaryWriter(ms);
 
-            bw.Write("Hello shithead!");
             npss.Write(ms.ToArray(), 0, ms.ToArray().Length);
             ms.SetLength(0);
             
