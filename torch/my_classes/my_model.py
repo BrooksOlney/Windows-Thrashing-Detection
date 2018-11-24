@@ -15,7 +15,7 @@ class MyModel(nn.Module):
   def __init__(self):
     super(MyModel, self).__init__()
     
-    self.input_dimensions = my_data.training_dataset.rows
+    self.input_dimensions = training_data.training_dataset.rows
     self.output_dimensions = 1
     self.hidden_layer = 2
     
