@@ -36,6 +36,7 @@ model.eval()
 
 detector = ThrashingDetector()
 
+#while(1): #for testing, delete later
 while(detector.counter < MAX_COUNT):
 	time.sleep(POLLING_INTERVAL)
 
@@ -43,7 +44,7 @@ while(detector.counter < MAX_COUNT):
 	
 	test_tensor_data = dataset.tensor_features
 	
-	prediction = model(test_tensor_data).item()
+	prediction = model.predict(test_tensor_data).item()
 	
 	detector.predict(prediction)
 	print(detector.counter)
