@@ -21,12 +21,10 @@ class TrainingDataset(Dataset):
     self.tensor_features = torch.tensor(self.features.values, dtype = torch.float)
     self.tensor_results = torch.tensor(self.results.values, dtype = torch.float)
     self.normalize_data()
-    print(self.tensor_features)
 
   def normalize_data(self):
     self.mean = self.tensor_features.mean()
-    self.std = self.tensor_features.std()
-    print("MEAN and STD:", self.tensor_features.mean(), self.tensor_features.std())    
+    self.std = self.tensor_features.std()  
     self.tensor_features = torch.sub(self.tensor_features, self.mean)
     self.tensor_features = torch.div(self.tensor_features, self.std)
 
@@ -34,7 +32,6 @@ class TrainingDataset(Dataset):
   def reload_data(self):
     with open('data/training_set.csv', 'r') as train_data_csv:
         self.__init__(True, train_data_csv)
-
 
 
 
@@ -50,8 +47,7 @@ class TestingDataset(Dataset):
     def normalize_data(self):
         self.tensor_features = torch.sub(self.tensor_features, self.mean)
         self.tensor_features = torch.div(self.tensor_features, self.std)
-        print(self.tensor_features)
-    
+        
     def reload_data(self):
         while(1):
             try:
@@ -71,8 +67,6 @@ class TestingDataset(Dataset):
                 pass # Keep trying until it works
 
 
-
-
 with open('data/training_set.csv', 'r') as train_data_csv:
     training_dataset = TrainingDataset(train_data_csv)
 
@@ -82,6 +76,6 @@ while(1):
             testing_dataset = TestingDataset(test_data_csv, training_dataset.mean, training_dataset.std)
             break
     except (PermissionError, FileNotFoundError):
-        pass
+        pass #Keep trying until it works
 
         
