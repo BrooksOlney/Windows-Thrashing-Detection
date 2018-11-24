@@ -9,7 +9,7 @@ from torch import nn
 from torch import optim
 from torch.utils.data import Dataset
 
-from . import my_data
+from . import training_data
 
 class MyModel(nn.Module):
   def __init__(self):
@@ -20,7 +20,7 @@ class MyModel(nn.Module):
     self.hidden_layer = 2
     
     self.learning_rate = 0.01
-    self.training_iterations = 25000 #NAN errors over 3000 currently
+    self.training_iterations = 25000
     
     self.linear_layer_1 = nn.Linear(self.input_dimensions, self.hidden_layer)
     self.linear_layer_2 = nn.Linear(self.hidden_layer, self.output_dimensions)
