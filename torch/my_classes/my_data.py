@@ -3,6 +3,8 @@ import torch.nn as nn
 import torchvision
 import numpy as np
 import pandas as pd
+import time
+import win32pipe
 
 from torch import nn
 from torch import optim
@@ -55,7 +57,8 @@ class TestingDataset(Dataset):
                     self.__init__(test_data_csv, self.mean, self.std)
                     break
 
-            except (PermissionError, FileNotFoundError):    
+            except (PermissionError, FileNotFoundError):
+                print("EXCEPTION RELOADING")    
                 pass # Keep trying until it works            
 
     def read_last_line(self, csv_file):
@@ -64,6 +67,8 @@ class TestingDataset(Dataset):
                 self.last_line = csv_file.readlines()[-1].strip().split(",")
                 break
             except (PermissionError, FileNotFoundError, IndexError):
+                print("EXCEPTION READ LAST LINE")
+                time.sleep(0.125)
                 pass # Keep trying until it works
 
 
@@ -76,6 +81,7 @@ while(1):
             testing_dataset = TestingDataset(test_data_csv, training_dataset.mean, training_dataset.std)
             break
     except (PermissionError, FileNotFoundError):
+        print("EXCEPTION WHILE OPENING")
         pass #Keep trying until it works
 
         

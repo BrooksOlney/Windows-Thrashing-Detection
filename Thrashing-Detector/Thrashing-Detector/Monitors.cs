@@ -59,11 +59,11 @@ namespace Thrashing_Detector
                         processes();
                     }
 
-                    if (_thrashingCounter == THRASHING_TIMER)
-                    {
-                        MessageBox.Show("Thrashing is occuring!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        _thrashingCounter = 0;
-                    }
+                    //if (_thrashingCounter == THRASHING_TIMER)
+                    //{
+                    //    MessageBox.Show("Thrashing is occuring!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    //    _thrashingCounter = 0;
+                    //}
                 }
                 else if(_thrashingCounter > 0)
                 {

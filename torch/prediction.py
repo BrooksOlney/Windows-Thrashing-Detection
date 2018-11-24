@@ -36,6 +36,8 @@ model.eval()
 
 detector = ThrashingDetector()
 
+i = 0
+
 #while(1): #for testing, delete later
 while(detector.counter < MAX_COUNT):
 	time.sleep(POLLING_INTERVAL)
@@ -49,5 +51,5 @@ while(detector.counter < MAX_COUNT):
 	detector.predict(prediction)
 	print(detector.counter)
 	print(prediction * 100, "%")
-
+	print("Count: ", i)
 print("THRASHING!!!")
