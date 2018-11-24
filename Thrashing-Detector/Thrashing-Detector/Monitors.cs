@@ -14,10 +14,10 @@ namespace Thrashing_Detector
     class Monitors
     {
         // constants defining thrashing requirements
-        const double PROC_THRASHING = 25;
-        const double MEM_THRASHING = 80;
-        const double HARDFAULTS_THRASHING = 1000;
-        const int THRASHING_TIMER = 30;
+        public double PROC_THRASHING { get; set; }
+        public double MEM_THRASHING { get; set; }
+        public double HARDFAULTS_THRASHING { get; set; }
+        public int THRASHING_TIMER { get; set; }
 
         // Member variables for different resource types 
         public double _procTime { get; set; }
@@ -25,6 +25,7 @@ namespace Thrashing_Detector
         public float  _totalMemory { get; set; }
         public double _pageFaults { get; set; }
         public int    _thrashingCounter { get; set; }
+        public bool   _thrashingOccurance { get; set; }
 
         // Records all results in real time
         public List<Tuple<double, double, double>> _records { get; set; }
@@ -51,6 +52,7 @@ namespace Thrashing_Detector
             {
                 if (_pageFaults > HARDFAULTS_THRASHING)
                 {
+                    _thrashingOccurance = true;
                     _thrashingCounter++;
                     if (_thrashingCounter == THRASHING_TIMER / 2)
                     {
@@ -65,9 +67,14 @@ namespace Thrashing_Detector
                 }
                 else if(_thrashingCounter > 0)
                 {
+                    _thrashingOccurance = false;
                     _thrashingCounter--;
                 }
 
+            }
+            else
+            {
+                _thrashingOccurance = false;
             }
         }
         //function to capture the processes
@@ -84,13 +91,19 @@ namespace Thrashing_Detector
             sw.Close();
         }
         // constructor
-        internal Monitors()
+        internal Monitors(double procthrashing = 25, double memthrashing = 85, double hardfaultsthrashing = 300, int thrashingtimer = 30)
         {
+            PROC_THRASHING = procthrashing;
+            MEM_THRASHING = memthrashing;
+            HARDFAULTS_THRASHING = hardfaultsthrashing;
+            THRASHING_TIMER = thrashingtimer;
+
             _procTime = 0;
             _memoryUsed = 0;
             _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
             _pageFaults = 0;
             _thrashingCounter = 0;
+            _thrashingOccurance = false;
             _records = new List<Tuple<double, double, double>>();
         }
     }
