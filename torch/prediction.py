@@ -9,11 +9,13 @@ from torch import nn
 from torch import optim
 from torch.utils.data import Dataset
 
-from my_classes import my_data
+# from my_classes import my_data
+from my_classes import testing_data
 from my_classes import my_model
 
 MAX_COUNT = 30
 POLLING_INTERVAL = 0.125
+
 
 class ThrashingDetector:
 	def __init__(self):
@@ -25,7 +27,7 @@ class ThrashingDetector:
 
 device = torch.device("cpu")
 
-dataset = my_data.testing_dataset
+dataset = testing_data.testing_dataset
 
 X = dataset.tensor_features
 
@@ -36,10 +38,8 @@ model.eval()
 
 detector = ThrashingDetector()
 
-i = 0
-
-#while(1): #for testing, delete later
-while(detector.counter < MAX_COUNT):
+while(1): #for testing, delete later
+# while(detector.counter < MAX_COUNT):
 	time.sleep(POLLING_INTERVAL)
 
 	dataset.reload_data()
@@ -51,5 +51,5 @@ while(detector.counter < MAX_COUNT):
 	detector.predict(prediction)
 	print(detector.counter)
 	print(prediction * 100, "%")
-	print("Count: ", i)
+
 print("THRASHING!!!")
