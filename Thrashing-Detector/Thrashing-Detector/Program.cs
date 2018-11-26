@@ -89,14 +89,14 @@ namespace Thrashing_Detector
                             Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}%\nHard Page Faults/sec: {2}\nThrashing counter: {3}",
                                 _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults, _monitors._thrashingCounter);
 
-                            if (npss.IsConnected)
+                            try
                             {
                                 bw.Write(String.Format(" {0}, {1}, {2} ", _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults.ToString("N2")));
-                                npss.Write(ms.ToArray(), 0, ms.ToArray().Length);
+                                npss.WriteAsync(ms.ToArray(), 0, ms.ToArray().Length);
                                 ms.SetLength(0);
-                            }
-                            else
+                            } catch(Exception ex)
                             {
+                                Console.WriteLine("PyTorch has disconnected.");
                                 break;
                             }
 
@@ -110,7 +110,8 @@ namespace Thrashing_Detector
             npss.Close();
             ms.Close();
             bw.Close();
-            Console.WriteLine("Testing...");
+            Console.WriteLine("Closing...");
+            Console.ReadKey();
         }
 
         static void ClearConsole()
