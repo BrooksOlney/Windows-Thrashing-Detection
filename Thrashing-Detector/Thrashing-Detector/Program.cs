@@ -69,7 +69,7 @@ namespace Thrashing_Detector
             npss.Write(ms.ToArray(), 0, ms.ToArray().Length);
             ms.SetLength(0);
             
-            while (!Console.KeyAvailable)
+            while (!Console.KeyAvailable && npss.IsConnected)
             {
                 using(FileStream fileHandle = new FileStream("torch/data/testing_set.csv", FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
@@ -89,11 +89,17 @@ namespace Thrashing_Detector
                             Console.WriteLine("CPU Time: {0}%\nMemory Used: {1}%\nHard Page Faults/sec: {2}\nThrashing counter: {3}",
                                 _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults, _monitors._thrashingCounter);
 
-                            bw.Write(String.Format(" {0}, {1}, {2} ", _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults.ToString("N2")));
+                            if (npss.IsConnected)
+                            {
+                                bw.Write(String.Format(" {0}, {1}, {2} ", _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults.ToString("N2")));
+                                npss.Write(ms.ToArray(), 0, ms.ToArray().Length);
+                                ms.SetLength(0);
+                            }
+                            else
+                            {
+                                break;
+                            }
 
-
-                            npss.Write(ms.ToArray(), 0, ms.ToArray().Length);
-                            ms.SetLength(0);
                             sw.WriteLine("{0}, {1}, {2}", _monitors._procTime.ToString("N2"), _monitors._memoryUsed.ToString("N2"), _monitors._pageFaults.ToString("N2"));
                         }
                     }
@@ -101,6 +107,9 @@ namespace Thrashing_Detector
             }
 
             datacollection.Close();
+            npss.Close();
+            ms.Close();
+            bw.Close();
             Console.WriteLine("Testing...");
         }
 
