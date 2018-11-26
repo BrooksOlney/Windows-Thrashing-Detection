@@ -55,11 +55,14 @@ namespace Thrashing_Detector
             }
 
             Monitors _monitors = new Monitors(procthrashing, memthrashing, hardfaultsthrashing, thrashingTimer);
-            
+
+            Console.WriteLine("Opening named-pipe for interprocess communication...");
             NamedPipeServerStream npss = new NamedPipeServerStream("pytorchModel", PipeDirection.InOut, 1, PipeTransmissionMode.Message);
 
+            Console.WriteLine("Waiting for inbound connection from machine learning model...");
             npss.WaitForConnection();
 
+            ClearConsole();
             MemoryStream ms = new MemoryStream();
             BinaryWriter bw = new BinaryWriter(ms);
 

@@ -34,8 +34,7 @@ namespace Thrashing_Detector
         PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available Bytes");
         PerformanceCounter pagingCounter = new PerformanceCounter("Memory", "Page Reads/sec");
-        //PerformanceCounter totalRam = new PerformanceCounter("Memory", "Total MBytes");
-
+       
         // Poll the system for resource values
         public void PollFunction()
         {
@@ -50,7 +49,7 @@ namespace Thrashing_Detector
         {
             if (_memoryUsed > MEM_THRASHING)
             {
-                if (_pageFaults > HARDFAULTS_THRASHING)
+                if (_pageFaults > HARDFAULTS_THRASHING && _procTime < PROC_THRASHING)
                 {
                     _thrashingOccurance = true;
                     _thrashingCounter++;
