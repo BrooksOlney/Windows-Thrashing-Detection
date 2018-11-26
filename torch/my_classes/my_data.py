@@ -82,6 +82,6 @@ while(1):
             break
     except (PermissionError, FileNotFoundError):
         print("EXCEPTION WHILE OPENING")
-        pass #Keep trying until it works
+        pass #Keep trying until it works 
 
         
