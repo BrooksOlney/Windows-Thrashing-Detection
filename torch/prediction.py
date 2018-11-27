@@ -28,7 +28,7 @@ class ThrashingDetector:
 	def predict(self, prediction):
 		step = 1 if prediction > PREDICTION_CONFIDENCE else -1
 		self.counter = max(0, min(MAX_COUNT, self.counter + step))
-		self.is_thrashing = True if self.counter < MAX_COUNT else 0
+		self.is_thrashing = True if self.counter == MAX_COUNT else 0
 
 device = torch.device("cpu")
 
